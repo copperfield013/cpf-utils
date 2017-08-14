@@ -575,4 +575,9 @@ public class TextUtils {
 		DecimalFormat df = new DecimalFormat(pattern);
 		return df.format(num);
 	}
+
+	public static String formatFloat(float number, String pattern) {
+		DecimalFormat format = new DecimalFormat(pattern);
+		return format.format(number);
+	}
 }

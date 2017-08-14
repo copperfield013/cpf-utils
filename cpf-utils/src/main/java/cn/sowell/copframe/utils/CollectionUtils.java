@@ -61,7 +61,7 @@ public class CollectionUtils {
 				buffer.append(FormatUtils.toString(item) + _spliter);
 			});
 			if(buffer.length() > 0){
-				buffer.delete(buffer.length() - spliter.length() - 1, buffer.length());
+				buffer.delete(buffer.length() - spliter.length(), buffer.length());
 			}
 			return buffer.toString();
 		}
