@@ -124,20 +124,24 @@ public class FormatUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T toClass(Class<T> formatClass, Object value){
-		if(String.class.equals(formatClass)){
-			return (T) toString(value);
-		}else if(Integer.class == formatClass || Integer.TYPE == formatClass){
-			return (T) toInteger(value);
-		}else if(Long.class == formatClass || Long.TYPE == formatClass){
-			return (T) toLong(value);
-		}else if(Double.class == formatClass || Double.TYPE == formatClass){
-			return (T) toDouble(value);
-		}else if(BigDecimal.class == formatClass){
-			return (T) toBigDecimal(value);
-		}else if(Boolean.class == formatClass || Boolean.TYPE == formatClass){
-			return (T) toBoolean(value);
-		}else if(Date.class.isAssignableFrom(formatClass)){
+		if(formatClass != null && value != null && formatClass.isAssignableFrom(value.getClass())) {
 			return (T) value;
+		}else {
+			if(String.class.equals(formatClass)){
+				return (T) toString(value);
+			}else if(Integer.class == formatClass || Integer.TYPE == formatClass){
+				return (T) toInteger(value);
+			}else if(Long.class == formatClass || Long.TYPE == formatClass){
+				return (T) toLong(value);
+			}else if(Double.class == formatClass || Double.TYPE == formatClass){
+				return (T) toDouble(value);
+			}else if(BigDecimal.class == formatClass){
+				return (T) toBigDecimal(value);
+			}else if(Boolean.class == formatClass || Boolean.TYPE == formatClass){
+				return (T) toBoolean(value);
+			}else if(Date.class.isAssignableFrom(formatClass)){
+				return (T) value;
+			}
 		}
 		return null;
 	}
