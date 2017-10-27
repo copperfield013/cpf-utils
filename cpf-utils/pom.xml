@@ -63,10 +63,6 @@
 	</dependencies>
 	
 	<distributionManagement>
-        <!-- <repository>
-            <id>nexus-3rd</id>
-            <url>http://192.168.1.6:8081/nexus/content/repositories/thirdparty/</url>
-        </repository> -->
         <repository>
         	<id>aliyun44-nexus</id>
         	<url>http://139.196.123.44:32108/repository/nexus/</url>
