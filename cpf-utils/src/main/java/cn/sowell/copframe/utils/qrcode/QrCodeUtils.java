@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import cn.sowell.copframe.utils.FormatUtils;
 import cn.sowell.copframe.utils.TextUtils;
 
@@ -23,6 +25,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 public class QrCodeUtils {
+	static Logger logger = Logger.getLogger(QrCodeUtils.class);
 	
 	/**
 	 * 根据编码和配置生成二维码并写入输出流
@@ -76,7 +79,11 @@ public class QrCodeUtils {
 	public static boolean encodeQRCodeImage(String content, String charset, String imagePath, int width, int height) {
     	File file = new File(imagePath);
     	if(!file.exists()){
-    		file.mkdirs();
+    		try {
+				file.createNewFile();
+			} catch (IOException e) {
+				logger.error("创建文件时失败", e);
+			}
     	}
     	try {
 			FileOutputStream outputStream = new FileOutputStream(file);

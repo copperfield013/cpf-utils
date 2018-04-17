@@ -1,10 +1,13 @@
 package cn.sowell.copframe.utils;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 
@@ -96,4 +99,56 @@ public class CollectionUtils {
 		appendTo(source, result, itemGetter);
 		return result;
 	}
+	
+	/**
+	 * 处理集合中的每个对象，将其转换为有序set
+	 * @param source
+	 * @param itemGetter
+	 * @return
+	 */
+	public static <T, R> LinkedHashSet<R> toSet(Collection<T> source, Function<T, R> itemGetter){
+		LinkedHashSet<R> result = new LinkedHashSet<R>();
+		appendTo(source, result, itemGetter);
+		return result;
+	}
+	
+	/**
+	 * 筛选Map中的元素，将符合条件的元素复制到另一个map中
+	 * @param source 存放原数据的map
+	 * @param target 复制的目标map
+	 * @param filterFn 筛选器，返回true时，将元素放到目标map中
+	 */
+	public static <T, R, M extends Map<T, R>> void filter(M source, M target, BiFunction<T, R, Boolean> filterFn){
+		source.forEach((key, value)->{
+			if(Boolean.TRUE.equals(filterFn.apply(key, value))){
+				target.put(key, value);
+			}
+		});
+	}
+	
+	public static <T, R> LinkedHashMap<T, R> filter(Map<T, R> source, Function<T, Boolean> filterFn){
+		LinkedHashMap<T, R> map = new LinkedHashMap<T, R>();
+		filter(source, map, (key, value)->filterFn.apply(key));
+		return map;
+	}
+	
+	public static <T> void filter(Collection<T> source, Collection<T> target, Function<T, Boolean> filterFn){
+		source.forEach(item->{
+			if(Boolean.TRUE.equals(filterFn.apply(item))){
+				target.add(item);
+			}
+		});
+	}
+	
+	public static <T> LinkedHashSet<T> filter(Collection<T> source, Function<T, Boolean> filterFn){
+		LinkedHashSet<T> set = new LinkedHashSet<T>();
+		filter(source, set, filterFn);
+		return set;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends V, V> V[] toArray(Collection<T> source, Class<V> eleClass){
+		return source.toArray((V[]) Array.newInstance(eleClass, source.size()));
+	}
+	
 }

@@ -146,4 +146,31 @@ public class FormatUtils {
 		return null;
 	}
 	
+	/**
+	 * 取第一个非null的对象
+	 * @param objects
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@SafeVarargs
+	public static <T> T coalesce(T...objects){
+		return (T) coalesceWhole(objects);
+	}
+	
+	/**
+	 * 返回第一个非null的对象
+	 * @param objects
+	 * @return
+	 */
+	public static Object coalesceWhole(Object...objects){
+		if(objects.length > 0){
+			for (Object object : objects) {
+				if(object != null){
+					return object;
+				}
+			}
+		}
+		return null;
+	}
+	
 }

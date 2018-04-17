@@ -348,7 +348,7 @@ public class TextUtils {
 			buffer.insert(0, CHARS[mod]);
 			div = div / division;
 		} while (div > 0);
-		if(buffer.length() < length){
+		while(buffer.length() < length){
 			buffer.insert(0, "0");
 		}
 		return buffer.toString();
