@@ -1,5 +1,8 @@
 package cn.sowell.copframe.utils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
@@ -579,5 +582,16 @@ public class TextUtils {
 	public static String formatFloat(float number, String pattern) {
 		DecimalFormat format = new DecimalFormat(pattern);
 		return format.format(number);
+	}
+
+	public static String readAsString(InputStream inp) throws IOException {
+		StringBuffer xmlStr = new StringBuffer();
+		InputStreamReader reader = new InputStreamReader(inp);
+		char[] cbuf = new char[1000];
+		while(reader.read(cbuf) != -1) {
+			xmlStr.append(cbuf);
+		}
+		reader.close();
+		return xmlStr.toString();
 	}
 }

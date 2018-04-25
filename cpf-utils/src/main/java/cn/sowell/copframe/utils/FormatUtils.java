@@ -173,4 +173,25 @@ public class FormatUtils {
 		return null;
 	}
 	
+	public static String join(Object array, String split) {
+		if(array instanceof String) {
+			return (String) array;
+		}
+		if(array != null) {
+			StringBuffer buffer = new StringBuffer();
+			if(array instanceof Collection) {
+				((Collection<?>) array).forEach(e->buffer.append(toString(e) + split));
+			}else if(array.getClass().isArray()) {
+				for (Object e : (Object[])array) {
+					buffer.append(toString(e) + split);
+				}
+			}
+			if(buffer.length() > 0) {
+				buffer.delete(buffer.length() - split.length(), buffer.length());
+			}
+			return buffer.toString();
+		}
+		return null;
+	}
+	
 }

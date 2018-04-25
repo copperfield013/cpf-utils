@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -194,7 +195,7 @@ public class HttpRequestUtils {
 		String result = post(url, "text/xml", xml.asXML());
 		try {
 			return new Dom4jNode(result);
-		} catch (XMLException e) {
+		} catch (XMLException | UnsupportedEncodingException e) {
 			logger.error("解析xml时发生错误" + result, e);
 		}
 		return null;

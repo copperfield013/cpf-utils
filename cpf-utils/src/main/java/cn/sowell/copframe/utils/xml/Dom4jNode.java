@@ -1,6 +1,8 @@
 package cn.sowell.copframe.utils.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,6 +14,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.tree.DefaultElement;
 
+import cn.sowell.copframe.utils.FormatUtils;
 import cn.sowell.copframe.utils.TextUtils;
 /**
  * 
@@ -32,16 +35,20 @@ public class Dom4jNode implements XmlNode{
 	
 	static final SAXReader reader = new SAXReader();
 	
-	static Element toRoot(String xmlStr, String charset) throws XMLException{
+	static Element toRoot(InputStream inp) throws XMLException {
 		Document document;
 		try {
-			ByteArrayInputStream i = new ByteArrayInputStream(xmlStr.getBytes(charset));
-			document = reader.read(i);
-		} catch (UnsupportedEncodingException | DocumentException | NullPointerException e) {
+			document = reader.read(inp);
+		} catch (DocumentException | NullPointerException e) {
 			throw new XMLException(e);
 		}
 		return document.getRootElement();
 	}
+	
+	static InputStream toInputStram(String xmlStr, String charset) throws UnsupportedEncodingException {
+		return new ByteArrayInputStream(xmlStr.getBytes(FormatUtils.coalesce(charset, "utf-8")));
+	}
+	
 	/**
 	 * 直接创建一个空的xml元素
 	 */
@@ -66,15 +73,17 @@ public class Dom4jNode implements XmlNode{
 		}
 	}
 	
-	public Dom4jNode(String xmlStr) throws XMLException {
-		this(xmlStr, "utf-8");
+	public Dom4jNode(String xmlStr) throws XMLException, UnsupportedEncodingException {
+		this(xmlStr, null);
 	}
 	
-	public Dom4jNode(String xmlStr, String charset) throws XMLException{
-		this(toRoot(xmlStr, charset));
+	public Dom4jNode(String xmlStr, String charset) throws XMLException, UnsupportedEncodingException{
+		this(toRoot(toInputStram(xmlStr, charset)));
 	}
 	
-	
+	public Dom4jNode(InputStream inp) throws IOException, XMLException {
+		this(toRoot(inp));
+	}
 
 	@Override
 	public String getTagName() {
