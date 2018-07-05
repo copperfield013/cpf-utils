@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 public class CollectionUtils {
@@ -30,6 +31,35 @@ public class CollectionUtils {
 		});
 		return map;
 	}
+	
+	/**
+	 * 将集合中key相同的组合放到list中，以这个key为返回map的key，list为map的value
+	 * @param items
+	 * @param keyGetter
+	 * @return
+	 */
+	public static <T, V, C extends Collection<V>> Map<T, C> toCollectionMap(
+			Collection<V> items, 
+			Function<V, T> keyGetter, 
+			Supplier<C> collectionItemSupplier){
+		Assert.notNull(items);
+		Assert.notNull(keyGetter);
+		Assert.notNull(collectionItemSupplier);
+		Map<T, C> map = new LinkedHashMap<T, C>();
+		items.forEach(item->{
+			T key = keyGetter.apply(item);
+			if(key != null){
+				C list = map.get(key);
+				if(list == null){
+					list = collectionItemSupplier.get();
+					map.put(key, list);
+				}
+				list.add(item);
+			}
+		});
+		return map;
+	}
+	
 	/**
 	 * 将集合中key相同的组合放到list中，以这个key为返回map的key，list为map的value
 	 * @param items
@@ -37,21 +67,7 @@ public class CollectionUtils {
 	 * @return
 	 */
 	public static <T, V> Map<T, List<V>> toListMap(Collection<V> items, Function<V, T> keyGetter){
-		Assert.notNull(items);
-		Assert.notNull(keyGetter);
-		Map<T, List<V>> map = new LinkedHashMap<T, List<V>>();
-		items.forEach(item->{
-			T key = keyGetter.apply(item);
-			if(key != null){
-				List<V> list = map.get(key);
-				if(list == null){
-					list = new ArrayList<V>();
-					map.put(key, list);
-				}
-				list.add(item);
-			}
-		});
-		return map;
+		return toCollectionMap(items, keyGetter, ()->new ArrayList<>());
 	}
 	
 	public static String toChain(Collection<?> source, String spliter) {
