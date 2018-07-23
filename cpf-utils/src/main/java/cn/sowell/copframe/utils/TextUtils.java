@@ -12,9 +12,12 @@ import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -521,7 +524,7 @@ public class TextUtils {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			Charset charset = null;
-			if(Charset.isSupported(c)){
+			if(c != null && Charset.isSupported(c)){
 				charset = Charset.forName(c);
 			}else{
 				charset = Charset.defaultCharset();
@@ -594,4 +597,20 @@ public class TextUtils {
 		reader.close();
 		return xmlStr.toString();
 	}
+	
+	public static <T, R extends Collection<T>> R split(
+			String toSplit, 
+			String spliter, 
+			Supplier<R> containerSuppilier, 
+			Function<String, T> func){
+		R container = containerSuppilier.get();
+		if(hasText(toSplit)) {
+			String[] array = toSplit.split(",");
+			for (String e : array) {
+				container.add(func.apply(e));
+			}
+		}
+		return container;
+	}
+	
 }
