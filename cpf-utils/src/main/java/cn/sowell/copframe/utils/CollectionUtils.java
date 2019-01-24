@@ -42,6 +42,21 @@ public class CollectionUtils {
 			Collection<V> items, 
 			Function<V, T> keyGetter, 
 			Supplier<C> collectionItemSupplier){
+		return toCollectionMap(items, keyGetter, item->item, collectionItemSupplier);
+	}
+	
+	/**
+	 * 将集合中key相同的组合放到list中，以这个key为返回map的key，list为map的value
+	 * @param <VV>
+	 * @param items
+	 * @param keyGetter
+	 * @return
+	 */
+	public static <T, V, VV, C extends Collection<VV>> Map<T, C> toCollectionMap(
+			Collection<V> items, 
+			Function<V, T> keyGetter, 
+			Function<V, VV> itemWrapper,
+			Supplier<C> collectionItemSupplier){
 		Assert.notNull(items);
 		Assert.notNull(keyGetter);
 		Assert.notNull(collectionItemSupplier);
@@ -54,7 +69,7 @@ public class CollectionUtils {
 					list = collectionItemSupplier.get();
 					map.put(key, list);
 				}
-				list.add(item);
+				list.add(itemWrapper.apply(item));
 			}
 		});
 		return map;

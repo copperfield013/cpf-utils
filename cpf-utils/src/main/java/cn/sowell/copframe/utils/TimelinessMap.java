@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.apache.log4j.Logger;
 
@@ -151,5 +152,22 @@ public class TimelinessMap<K, V>{
 	public synchronized void refresh() {
 		lastOperateTimeMap.clear();
 		source.clear();
+	}
+
+	public Map<K, V> getAll(Supplier<Map<K, V>> supplier) {
+		Map<K, V> map = supplier.get();
+		if(map != null) {
+			synchronized (source) {
+				map.forEach((key, value)->{
+					source.put(key, value);
+					lastOperateTimeMap.put(key, System.currentTimeMillis());
+				});
+			}
+		}
+		return new HashMap<>(source);
+	}
+
+	public boolean contains(String moduleName) {
+		return source.containsKey(moduleName);
 	}
 }
