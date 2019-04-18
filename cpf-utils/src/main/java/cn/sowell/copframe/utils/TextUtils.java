@@ -15,7 +15,9 @@ import java.time.temporal.Temporal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -611,6 +613,14 @@ public class TextUtils {
 			}
 		}
 		return container;
+	}
+
+	public static Set<Long> splitToLongSet(String toSplit, String spliter) {
+		return split(toSplit, spliter, LinkedHashSet::new, a->Long.valueOf(a));
+	}
+
+	public static Set<String> split(String toSplit, String spliter) {
+		return split(toSplit, spliter, LinkedHashSet::new, a->a);
 	}
 	
 }
