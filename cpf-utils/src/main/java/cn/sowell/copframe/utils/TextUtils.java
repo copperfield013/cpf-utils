@@ -607,7 +607,7 @@ public class TextUtils {
 			Function<String, T> func){
 		R container = containerSuppilier.get();
 		if(hasText(toSplit)) {
-			String[] array = toSplit.split(",");
+			String[] array = toSplit.split(spliter);
 			for (String e : array) {
 				container.add(func.apply(e));
 			}
