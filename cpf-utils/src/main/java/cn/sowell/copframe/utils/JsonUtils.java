@@ -5,7 +5,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSONObject;
 
 public class JsonUtils {
-	public static JSONObject convertToStringKeyMap(Map<? extends Object, String> map) {
+	public static JSONObject convertToStringKeyMap(Map<? extends Object, ? extends Object> map) {
 		if(map != null) {
 			JSONObject jo = new JSONObject();
 			map.forEach((key, val)->{
