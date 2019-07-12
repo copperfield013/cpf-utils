@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -229,6 +230,16 @@ public class HttpRequestUtils {
 	 */
 	public static String getRealPath(HttpServletRequest request, String path){
 		return request.getServletContext().getRealPath(path);
+	}
+
+	public static Map<String, String> convertParamMap(HttpServletRequest request) {
+		Map<String, String> map = new LinkedHashMap<String, String>();
+		request.getParameterMap().forEach((paramName, paramValues)->{
+			if(paramValues != null && paramValues.length > 0) {
+				map.put(paramName, paramValues[0]);
+			}
+		});
+		return map;
 	}
 	
 	
