@@ -622,5 +622,9 @@ public class TextUtils {
 	public static Set<String> split(String toSplit, String spliter) {
 		return split(toSplit, spliter, LinkedHashSet::new, a->a);
 	}
+
+	public static Set<Integer> splitToIntegerSet(String toSplit, String spliter) {
+		return split(toSplit, spliter, LinkedHashSet::new, a->Integer.valueOf(a));
+	}
 	
 }
