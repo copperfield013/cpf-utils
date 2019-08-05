@@ -3,12 +3,17 @@ package cn.sowell.copframe.utils;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 
@@ -180,6 +185,25 @@ public class CollectionUtils {
 	@SuppressWarnings("unchecked")
 	public static <T extends V, V> V[] toArray(Collection<T> source, Class<V> eleClass){
 		return source.toArray((V[]) Array.newInstance(eleClass, source.size()));
+	}
+
+	public static <T> void removes(Iterable<T> collection, Predicate<T> removable) {
+		if(collection != null) {
+			Iterator<T> itr = collection.iterator();
+			while(itr.hasNext()) {
+				T item = itr.next();
+				if(removable.test(item)) {
+					itr.remove();
+				}
+			}
+		}
+	}
+
+	public static <K, V> void removesMapItem(Map<K, V> map, BiPredicate<K, V> removable) {
+		if(map != null) {
+			Set<Entry<K, V>> entrySet = map.entrySet();
+			removes(entrySet, entry->removable.test(entry.getKey(), entry.getValue()));
+		}
 	}
 	
 }
